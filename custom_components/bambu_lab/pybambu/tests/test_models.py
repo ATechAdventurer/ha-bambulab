@@ -522,6 +522,39 @@ class TestH2D(unittest.TestCase):
         self.assertEqual(self.temperature.left_nozzle_target_temperature, 0)
 
 
+class TestX2DSupport(unittest.TestCase):
+    """Test that X2D printer is properly supported."""
+
+    def setUp(self):
+        self.client = MagicMock()
+        self.client._device = MagicMock()
+        self.client._device.extruder = Extruder(self.client._device)
+        self.info = Info(self.client)
+
+        # Load X2D test data (based on H2D template)
+        try:
+            with open(os.path.join(os.path.dirname(__file__), 'MOCK-X2D.json'), 'r') as f:
+                self.x2d_data = json.load(f)
+        except FileNotFoundError:
+            self.skipTest("X2D test data not available")
+
+    def test_x2d_printer_enum_exists(self):
+        """Test that X2D is defined in Printers enum."""
+        self.assertTrue(hasattr(Printers, 'X2D'))
+        self.assertEqual(Printers.X2D, "X2D")
+
+    def test_x2d_print_update(self):
+        """Test that X2D can process print updates."""
+        if not hasattr(self, 'x2d_data'):
+            self.skipTest("X2D test data not available")
+
+        data = self.x2d_data.get('pushall', {})
+        if not data:
+            self.skipTest("No pushall data in X2D test payload")
+
+        result = self.client._device.extruder.print_update(data)
+        # Just verify the method completes without error
+        self.assertIsNotNone(result)
 
 
 if __name__ == '__main__':

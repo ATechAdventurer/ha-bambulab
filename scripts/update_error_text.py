@@ -21,6 +21,7 @@ _DEVICE_TYPES = {
     "X1": "00M",
     "X1C": "00M",
     "X1E": "03W",
+    "X2D": "04X",
     "A1": "039",
     "A1MINI": "030",
     "P1P": "01S",
@@ -28,6 +29,7 @@ _DEVICE_TYPES = {
     "P2S": "22E",
     "H2S": "093",
     "H2D": "094",
+    "H2DPRO": "094",
 }
 
 # Map from printer model on https://wiki.bambulab.com/en/hms/home, to device name
